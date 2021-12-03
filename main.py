@@ -35,7 +35,7 @@ def getStartingDirection(position, isRandom):
 
 
 class TronModel(Model):
-    def __init__(self, n_agents, max_path_length, fov, isStartingPositionRandom):
+    def __init__(self, n_agents, max_path_length, fov, isStartingPositionRandom, teams):
         super().__init__()
         self.schedule = RandomActivation(self)
         self.grid = MultiGrid(26, 26, torus=False)
@@ -43,9 +43,15 @@ class TronModel(Model):
 
         for i in range(n_agents):
             self.startingPositions.append(getStartingPosition(self.startingPositions, isStartingPositionRandom))
-            a = LightcycleAgent(i, self.startingPositions[-1],
-                                getStartingDirection(self.startingPositions[-1], isStartingPositionRandom), self, fov,
-                                max_path_length)
+            if teams:
+                a = LightcycleAgent(i, self.startingPositions[-1],
+                                    getStartingDirection(self.startingPositions[-1], isStartingPositionRandom), self, fov,
+                                    max_path_length, i % 2)
+            else:
+                a = LightcycleAgent(i, self.startingPositions[-1],
+                                    getStartingDirection(self.startingPositions[-1], isStartingPositionRandom), self, fov,
+                                    max_path_length, 3)
+
             self.schedule.add(a)
             self.grid.place_agent(a, self.startingPositions[-1])
 

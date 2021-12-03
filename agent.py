@@ -7,7 +7,7 @@ class LightcycleAgent(Agent):
     Lightcycle driver agent
     """
 
-    def __init__(self, unique_id, pos, direction, model, fov, max_path_length):
+    def __init__(self, unique_id, pos, direction, model, fov, max_path_length, agent_type):
         """
         Create a new Lightcycle agent.
 
@@ -26,6 +26,7 @@ class LightcycleAgent(Agent):
         self.fov = fov
         self.max_path_length = max_path_length
         self.ordered_lightpath = [self.pos]
+        self.agent_type = agent_type
 
     def move(self, fillings):
         new_direction = ''
