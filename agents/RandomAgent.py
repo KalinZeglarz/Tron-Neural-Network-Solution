@@ -8,15 +8,19 @@ class RandomAgent(Agent):
         super().__init__(pos, model)
         self.unique_id = unique_id
         self.pos = pos
-        self.boundries = [(-1, n) for n in range(0, 26)] + [(26, n) for n in range(0, 26)] + \
-                         [(n, -1) for n in range(0, 26)] + [(n, 26) for n in range(0, 26)]
+        self.boundries = [(-1, n) for n in range(0, 12)] + [(12, n) for n in range(0, 12)] + \
+                         [(n, -1) for n in range(0, 12)] + [(n, 12) for n in range(0, 12)]
         self.direction = direction
         self.agent_type = agent_type
         self.n_games = 0
         self.lightpath = set()
+        self.ordered_lightpath = [self.pos]
         self.others_lightpaths = set()
         for point in self.boundries:
             self.others_lightpaths.add(point)
+        self.fov = fov
+        self.max_path_length = max_path_length
+
 
     def move(self, fillings):
         new_direction = random.choice([*fillings])
@@ -36,6 +40,8 @@ class RandomAgent(Agent):
             self.model.grid.place_agent(self, tuple(new_pos))
             self.direction = new_direction
             self.pos = tuple(new_pos)
+            self.ordered_lightpath.append(self.pos)
+            self.eat_your_tail()
 
     def step(self):
         self.lightpath.add(self.pos)
@@ -49,6 +55,19 @@ class RandomAgent(Agent):
             fillings = ['S', 'E', 'N']
         self.move(fillings)
         # self.model.grid.place_agent(self, tuple(self.pos))
+
+    def eat_your_tail(self):
+        if len(self.ordered_lightpath) > self.max_path_length:
+            to_delete = self.ordered_lightpath[0]
+            self.lightpath.remove(to_delete)
+            self.ordered_lightpath = self.ordered_lightpath[1:]
+            self.model.grid._remove_agent(to_delete,
+                                          self.model.grid[to_delete[0], to_delete[1]][0])
+
+            for agent in self.model.schedule.agents:
+                if agent.unique_id != self.unique_id:
+                    if to_delete in agent.others_lightpaths:
+                        agent.others_lightpaths.remove(to_delete)
 
     def death(self):
 

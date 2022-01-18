@@ -19,15 +19,14 @@ class LightcycleAgent(Agent):
         self.pos = pos
         self.lightpath = set()
         self.others_lightpaths = set()
-        self.boundries = [(-1, n) for n in range(0, 26)] + [(26, n) for n in range(0, 26)] + \
-                         [(n, -1) for n in range(0, 26)] + [(n, 26) for n in range(0, 26)]
+        self.boundries = [(-1, n) for n in range(0, 12)] + [(12, n) for n in range(0, 12)] + \
+                         [(n, -1) for n in range(0, 12)] + [(n, 12) for n in range(0, 12)]
         self.direction = direction
         self.first_move = True
         self.fov = fov
         self.max_path_length = max_path_length
         self.ordered_lightpath = [self.pos]
         self.agent_type = agent_type
-        self.n_games = 0
 
     def move(self, fillings):
         new_direction = ''

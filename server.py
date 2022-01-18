@@ -41,42 +41,42 @@ def tronPortrayal(agent):
             portrayal = {"Shape": "circle",
                          "Filled": "true",
                          "Layer": 0,
-                         "Color": color[0],
+                         "Color": "#22FF22",
                          "r": 0.5
                          }
         elif agent.unique_id == 1:
             portrayal = {"Shape": "circle",
                          "Filled": "true",
                          "Layer": 0,
-                         "Color": color[1],
+                         "Color": "#FF2222",
                          "r": 0.5
                          }
         elif agent.unique_id == 2:
             portrayal = {"Shape": "circle",
                          "Filled": "true",
                          "Layer": 0,
-                         "Color": color[2],
+                         "Color": "#BBFFBB",
                          "r": 0.5
                          }
         elif agent.unique_id == 3:
             portrayal = {"Shape": "circle",
                          "Filled": "true",
                          "Layer": 0,
-                         "Color": color[3],
+                         "Color": "#FFBBBB",
                          "r": 0.5
                          }
         elif agent.unique_id == 4:
             portrayal = {"Shape": "circle",
                          "Filled": "true",
                          "Layer": 0,
-                         "Color": color[4],
+                         "Color": "#2222FF",
                          "r": 0.5
                          }
         elif agent.unique_id == 5:
             portrayal = {"Shape": "circle",
                          "Filled": "true",
                          "Layer": 0,
-                         "Color": color[5],
+                         "Color": '#BBBBFF',
                          "r": 0.5
                          }
         elif agent.unique_id == 6:
@@ -124,17 +124,17 @@ def tronPortrayal(agent):
     return portrayal
 
 
-grid = CanvasGrid(tronPortrayal, 26, 26, 500, 500)
+grid = CanvasGrid(tronPortrayal, 12, 12, 500, 500)
 
 server = ModularServer(TronModel,
                        [grid],
                        "Tron Agent Simulator",
                        {
-                           "n_agents": UserSettableParameter("slider", "Number of Agents", 2, 2, 12, 1)
-                           # "max_path_length": UserSettableParameter("slider", "Max Lightpath Length", 676, 10, 676, 1),
-                           # "fov": UserSettableParameter("slider", "Field of View", 26, 1, 26, 1),
-                           # "isStartingPositionRandom": UserSettableParameter("checkbox", "Random Starting Positions",
-                           #                                                   False),
+                           "n_agents": UserSettableParameter("slider", "Number of Agents", 2, 2, 6, 1),
+                           "fov": UserSettableParameter("slider", "Field of View", 11, 1, 11, 1),
+                           "max_path_length": UserSettableParameter("slider", "Max Lightpath Length", 100, 1, 100, 1),
+                           "isStartingPositionRandom": UserSettableParameter("checkbox", "Random Starting Positions",
+                                                                             False)
                            # "teams": UserSettableParameter("checkbox", "Team Deathmatch", False)
                        }
                        )
