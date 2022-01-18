@@ -1,34 +1,41 @@
 import random
+import threading
+from time import sleep
 
 from mesa.visualization.ModularVisualization import ModularServer
 from mesa.visualization.modules import CanvasGrid
+from mesa.visualization.modules import ChartModule
 from mesa.visualization.UserParam import UserSettableParameter
 
-from main import TronModel
+from game import TronModel
 
 number_of_colors = 12
 
 color = ["#" + ''.join([random.choice('0123456789ABCDEF') for j in range(6)])
          for i in range(number_of_colors)]
 
+chart = ChartModule(
+    [{"Label": "Gini", "Color": "#0000FF"}], data_collector_name="datacollector"
+)
+
 
 def tronPortrayal(agent):
     if agent is None:
         return
     if agent.agent_type == 0:
-            portrayal = {"Shape": "circle",
-                         "Filled": "true",
-                         "Layer": 0,
-                         "Color": "#FF0000",
-                         "r": 0.5
-                         }
+        portrayal = {"Shape": "circle",
+                     "Filled": "true",
+                     "Layer": 0,
+                     "Color": "#FF0000",
+                     "r": 0.5
+                     }
     elif agent.agent_type == 1:
-            portrayal = {"Shape": "circle",
-                         "Filled": "true",
-                         "Layer": 0,
-                         "Color": "#0000FF",
-                         "r": 0.5
-                         }
+        portrayal = {"Shape": "circle",
+                     "Filled": "true",
+                     "Layer": 0,
+                     "Color": "#0000FF",
+                     "r": 0.5
+                     }
     else:
         if agent.unique_id == 0:
             portrayal = {"Shape": "circle",
@@ -123,13 +130,16 @@ server = ModularServer(TronModel,
                        [grid],
                        "Tron Agent Simulator",
                        {
-                           "n_agents": UserSettableParameter("slider", "Number of Agents", 4, 2, 12, 1),
-                           "max_path_length": UserSettableParameter("slider", "Max Lightpath Length", 676, 10, 676, 1),
-                           "fov": UserSettableParameter("slider", "Field of View", 26, 1, 26, 1),
-                           "isStartingPositionRandom": UserSettableParameter("checkbox", "Random Starting Positions",
-                                                                             False),
-                           "teams": UserSettableParameter("checkbox", "Team Deathmatch", False)
+                           "n_agents": UserSettableParameter("slider", "Number of Agents", 2, 2, 12, 1)
+                           # "max_path_length": UserSettableParameter("slider", "Max Lightpath Length", 676, 10, 676, 1),
+                           # "fov": UserSettableParameter("slider", "Field of View", 26, 1, 26, 1),
+                           # "isStartingPositionRandom": UserSettableParameter("checkbox", "Random Starting Positions",
+                           #                                                   False),
+                           # "teams": UserSettableParameter("checkbox", "Team Deathmatch", False)
                        }
                        )
-server.port = 8521
-server.launch()
+
+if __name__ == "__main__":
+    server.port = 8521
+    server.launch()
+    print("Done!")
