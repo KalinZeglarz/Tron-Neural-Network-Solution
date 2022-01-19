@@ -83,7 +83,7 @@ class DeepAgent(Agent):
         boundry_down = self.pos[1]
 
         state = [
-            # Head
+            # Cycle position
             self.pos[0],
             self.pos[1],
 
@@ -237,33 +237,35 @@ class DeepAgent(Agent):
         # [0, 1, 0] - right
         # [0, 0, 1] - left
         new_pos, new_direction = self.get_pos_from_move(final_move)
-        if new_pos in self.lightpath or new_pos in self.boundries or new_pos in self.others_lightpaths:
-            state_new = self.get_state(tuple(new_pos), new_direction)
-            self.remember(state_old, final_move, -25, state_new, False)
-            temp_epsilon = self.epsilon
-            self.epsilon = 1
-            temp_pos = new_pos
-            while temp_pos == new_pos:
-                final_move = self.get_action(state_old)
-                temp_pos, new_direction = self.get_pos_from_move(final_move)
-            if temp_pos in self.lightpath or new_pos in self.boundries or temp_pos in self.others_lightpaths:
-                state_new = self.get_state(tuple(temp_pos), new_direction)
-                self.remember(state_old, final_move, -25, state_new, False)
-                temp_pos2 = temp_pos
-                while temp_pos2 == temp_pos or temp_pos2 == new_pos:
-                    final_move = self.get_action(state_old)
-                    temp_pos2, new_direction = self.get_pos_from_move(final_move)
-                new_pos = temp_pos2
-            else:
-                new_pos = temp_pos
-            self.epsilon = temp_epsilon
+
+        # if new_pos in self.lightpath or new_pos in self.boundries or new_pos in self.others_lightpaths:
+        #     state_new = self.get_state(tuple(new_pos), new_direction)
+        #     self.remember(state_old, final_move, -25, state_new, False)
+        #     temp_epsilon = self.epsilon
+        #     self.epsilon = 1
+        #     temp_pos = new_pos
+        #     while temp_pos == new_pos:
+        #         final_move = self.get_action(state_old)
+        #         temp_pos, new_direction = self.get_pos_from_move(final_move)
+        #     if temp_pos in self.lightpath or new_pos in self.boundries or temp_pos in self.others_lightpaths:
+        #         state_new = self.get_state(tuple(temp_pos), new_direction)
+        #         self.remember(state_old, final_move, -25, state_new, True)
+        #         temp_pos2 = temp_pos
+        #         while temp_pos2 == temp_pos or temp_pos2 == new_pos:
+        #             final_move = self.get_action(state_old)
+        #             temp_pos2, new_direction = self.get_pos_from_move(final_move)
+        #         new_pos = temp_pos2
+        #     else:
+        #         new_pos = temp_pos
+        #     self.epsilon = temp_epsilon
+
         state_new = self.get_state(tuple(new_pos), new_direction)
 
         if new_pos in self.boundries or not self.model.grid.is_cell_empty(new_pos):
             self.model.scores.append(self.score)
             self.death()
             self.model.schedule.remove(self)
-            self.remember(state_old, final_move, -25, state_new, False)
+            self.remember(state_old, final_move, -25, state_new, True)
             self.train_long_memory()
             self.net.save(self.unique_id)
 
